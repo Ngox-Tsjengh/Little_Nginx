@@ -44,7 +44,7 @@ tags:
 	$(V)ctags -R -L cscope.files
 
 clean:
-	rm -rf obj/* 
+	rm -f obj/* $(TARGET) cscope.* tags
 
 #list all files in some directories
 listf = $(filter $(if $(2),$(addprefix %.,$(2)),),\
