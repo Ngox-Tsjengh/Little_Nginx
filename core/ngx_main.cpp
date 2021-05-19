@@ -3,14 +3,13 @@
 
 #include "ngx_macro.h"
 #include "ngx_conf.h"
+#include "ngx_global.h"
 
-static void ngx_worker_start(int threads);
+void ngx_master_cycle();
+
+static int ngx_worker_start(int threads);
 static void ngx_worker_init(int threads);
-static void ngx_worker_cycle(int);
-
-static void ngx_master_cycle(int proc_num, const char* proc_name);
-static void ngx_process_spawn(int threads, const char* proc_name);
-
+static void ngx_worker_cycle(int proc_num, const char *proc_name);
 
 /* ngx_master_cycle -  Master Main Loop
  *
@@ -32,7 +31,6 @@ void ngx_master_cycle() {
 	NGX_Config *p_config = NGX_Config::GetInstance();
 	int workers = 4 ;//p_config-> Not implement yet
 	ngx_worker_start(workers);
-
 
 	/**************  **************
 	 * The Main Loop
@@ -56,10 +54,11 @@ void ngx_master_cycle() {
  * 
  * */
 
-static int  ngx_worker_start(int threads) {
-
+static int  ngx_worker_start(int threads)
+{
+	pid_t pid;
 	for (int i = 0; i < threads; i++) {
-		pid_t pid = fork();
+		pid = fork();
 		switch (pid)	// generate child process
 		{
 		case -1:
@@ -77,9 +76,7 @@ static int  ngx_worker_start(int threads) {
 			break;	//Go back
 
 		} //switch
-
 	} //for
-
 	return pid;
 }
 

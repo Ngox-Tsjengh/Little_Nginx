@@ -33,6 +33,14 @@ public:
 			}
 		}
 	};
+// ------------------------------------------------------
+public:
+	bool Load(const char *pConfName);	//Load Configuration File
+
+public:
+	//Vector to store configuration items
+	//std::vector<>
+
 };
 
 #endif //__NGX_CONF_H__

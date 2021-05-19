@@ -1,0 +1,5 @@
+./core/ngx_main.h
+./test/test2.c
+./headers/ngx_macro.h
+./headers/ngx_global.h
+./headers/ngx_conf.h

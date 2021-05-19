@@ -1,55 +1,50 @@
+V		= @
+
 CC		= g++
 CPPFLAGS = -Wall -Wextra -ggdb
 
 LD		= ld
 
-SRCDIR	= core	
 INCDIR	= headers
+SRCDIR	= core	
+INCDIR += $(SRCDIR)
 OBJDIR	= obj
-BINDIR	= bin
+BINDIR	= 
 
-#SLASH	= /
+SLASH	= /
 #TYPE	= c cpp
-SRC	= $(foreach c_dir,$(SRCDIR),$(call listf,$(c_dir),$(TYPE)))
-#SRCS = $(SRC)
+#SRCA	= $(foreach c_dir,$(SRCDIR),$(call listf,$(c_dir),$(TYPE)))
 SRCS	= $(shell find $(SRCDIR) -name '*.cpp' -o -name '*.c')
 OBJS	= $(addsuffix .o, $(basename $(SRCS)))
 
 HEAD	= $(call listf,headers,h)
-CPPFLAGS += $(addprefix -I,$(HEAD))
+CPPFLAGS += $(addprefix -I,$(INCDIR))
 
 TARGET	= nginx
 
 # ---------------------------------------------------------------
 
-all: $(BINDIR)/$(TARGET)
+all: $(BINDIR)$(TARGET) tags
 
-$(BINDIR)/$(TARGET): $(OBJS)
-	@echo $(SRCS)
-	@echo $(OBJS)
-	@echo $(SRC)
-	$(LD) $(OBJS) -o $@ $(LDFLAGS)
+$(BINDIR)$(TARGET): $(OBJS)
+	$(CC) $(addprefix $(OBJDIR)/,$(notdir $^)) -o $@
 	
-$(SRCDIR)/%.o: %.cpp
-	echo haha
-
 %.o: %.cpp
-	echo there
+	$(CC) $(CPPFLAGS) -c $< -o $(addprefix $(OBJDIR)/,$(notdir $@))
 
-.cpp.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+#$(OBJS): $(SRCS)
+#	$(CC) $(CPPFLAGS) -c $< -o $(addprefix $(OBJDIR)/,$(notdir $@))
 
-$(OBJS): $(SRCS)
-	@echo $(SRCS)
-	@echo $(OBJS)
-	@echo $(SRC)
-	$(CC) $(CPPFLAGS) $< 
+.PHONY: tags clean
 
-.PHONY: clean
+tags:
+	$(V)rm -f cscope.files cscope.in.out cscope.out cscope.po.out tags
+	$(V)find . -type f -name "*.[chS]" >cscope.files
+	$(V)cscope -q -R -b
+	$(V)ctags -R -L cscope.files
 
 clean:
-	rm -rf cscope& tags 
-
+	rm -rf obj/* 
 
 #list all files in some directories
 listf = $(filter $(if $(2),$(addprefix %.,$(2)),),\

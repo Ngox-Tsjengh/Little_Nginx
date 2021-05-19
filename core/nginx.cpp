@@ -8,10 +8,14 @@
 #include "ngx_macro.h"
 #include "ngx_conf.h"
 
+#include "ngx_main.h"
+
 /* Global Varaibles */
 pid_t	ngx_pid;		//Process ID of current process
 pid_t	ngx_parent;		//Process ID of parent process
 int		ngx_process;	//Indicate type of Process: Master, Slave
+
+void source_free();
 
 int main(int argc, char* const *argv) {
 
@@ -34,7 +38,7 @@ int main(int argc, char* const *argv) {
 
 	/* Main Loop
 	 * */
-	ngx_process_cycle();
+	ngx_master_cycle();
 
 	source_free();
 
