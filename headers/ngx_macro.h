@@ -9,7 +9,7 @@
 /* Process Related
  * */
 #define	NGX_PROCESS_MATSER 		0 	//Master, Manage worker, high privilege
-#define NGX_PROCESS_SLAVE		1	//Slave, do real work, low privilege
+#define NGX_PROCESS_WORKER		1	//Worker, do real work, low privilege
 
 
 #endif /* __NGX_MACRO_H__ */

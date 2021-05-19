@@ -1,13 +1,17 @@
-#include <stdio.h>
-void panic_spin(char* filename,			\
-				int line,				\
-				const char* func,		\
-				const char* condition)	\
-{
-	printf("\n\n\n!!!!! error !!!!!\n");
-	printf("filename: %s\n", filename);
-	printf("line:%d\n",line);
-	printf("function: %s\n",(char*)func);
-	printf("condition: %s\n",(char*)condition);
-	while(1);
-}
+#ifndef __NGX_DEBUG_H_
+#define __NGX_DEBUG_H_
+
+void panic_spin(char* filename, int line, const char* func, const char* condition);
+
+#define PANIC(...) panic_spin(__FILE__, __LINE__, __func__, __VA_ARGS__)
+
+#ifdef NDEBUG
+	#define ASSERT(CONDITION) ((void)0)
+#else
+#define ASSERT(CONDITION) 	\
+	if(CONDITION){}else{	\
+		PANIC(#CONDITION);	\
+	}
+#endif //NDEBUG
+
+#endif //__NGX_DEBUG_H_

@@ -5,6 +5,8 @@
 #include "ngx_conf.h"
 #include "ngx_global.h"
 
+#include "ngx_debug.h"
+
 void ngx_master_cycle();
 
 static int ngx_worker_start(int threads);
@@ -35,7 +37,7 @@ void ngx_master_cycle() {
 	 * The Main Loop
 	 * *****************************/ 
 	while(1) {
-		usleep(100000);
+		usleep(1000000);
 		printf("Master\n");
 	}
 }
@@ -68,6 +70,7 @@ static int  ngx_worker_start(int threads)
 			ngx_pid = getpid();		//Global
 			/* Enter Main Loop of Child Process */
 			ngx_worker_cycle(i, "Worker");
+			PANIC("workers reach place they shouldn't reach");
 			break;		//this should not happen
 
 		default://Parent Process
@@ -84,14 +87,22 @@ static int  ngx_worker_start(int threads)
  *
  * */
 void ngx_worker_cycle(int proc_num, const char* proc_name) {
-	
+	ngx_worker_init(proc_num);
+
+	while(1) {
+		usleep(1000000);
+		printf("I'm worker %d\n",proc_num);
+	}
 }
 
 /* ngx_worker_init - Initialization Work for worker process
  *
  * */
 static void ngx_worker_init(int proc_num) {
+	ngx_process = NGX_PROCESS_WORKER;	//set type of process
 
 	printf("Initialization\n");
+
+	return;
 }
 
