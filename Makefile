@@ -6,7 +6,8 @@ CPPFLAGS = -Wall -Wextra -ggdb
 LD		= ld
 
 INCDIR	= headers
-SRCDIR	= core	
+SRCDIR	= core	\
+		  log
 INCDIR += $(SRCDIR)
 OBJDIR	= obj
 BINDIR	= 

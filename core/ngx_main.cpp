@@ -23,7 +23,6 @@ static void ngx_worker_cycle(int proc_num, const char *proc_name);
  * */
 void ngx_master_cycle() {
 
-
 	/**************  **************
 	 * Create worker processes
 	 * TODO: Read how many worker process need to be create from configure file
@@ -53,7 +52,6 @@ void ngx_master_cycle() {
  * 	this function should not return
  * 
  * */
-
 static int  ngx_worker_start(int threads)
 {
 	pid_t pid;
@@ -65,15 +63,15 @@ static int  ngx_worker_start(int threads)
 			printf("Fork Failed!\n");
 			return -1;
 
-		case 0:		//Child Process
-			ngx_parent = ngx_pid;	//
-			ngx_pid = getpid();
+		case 0:	//Child Process
+			ngx_parent = ngx_pid;	//Global 
+			ngx_pid = getpid();		//Global
 			/* Enter Main Loop of Child Process */
 			ngx_worker_cycle(i, "Worker");
 			break;		//this should not happen
 
-		default:	//Parent Process
-			break;	//Go back
+		default://Parent Process
+			break;
 
 		} //switch
 	} //for

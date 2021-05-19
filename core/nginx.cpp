@@ -27,10 +27,10 @@ int main(int argc, char* const *argv) {
 
 	/* 1. Initialization
 	 */
-	NGX_Config *p_config = NGX_Config::GetInstance();	//Singelton
-	if (p_config->Load("nginx.conf") == false) {
-		exit(2);
-	}
+//	NGX_Config *p_config = NGX_Config::GetInstance();	//Singelton
+//	if (p_config->Load("nginx.conf") == false) {
+//		exit(2);
+//	}
 	
 
 	/* Create Daemon
