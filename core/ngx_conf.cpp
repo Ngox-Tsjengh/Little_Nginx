@@ -74,15 +74,15 @@ bool NGX_Config::Load(const char *pConfName) {
         if(ptmp != NULL)
         {
             pNGX_ConfItem p_confitem = new NGX_ConfItem;
-            memset(p_confitem,0,sizeof(CConfItem));
+            memset(p_confitem,0,sizeof(NGX_ConfItem));
 
-            strncpy(p_confitem->ItemName,linebuf,(int)(ptmp-linebuf)); //string in the left of "=" is copied to p_confitem->Name
-            strcpy(p_confitem->ItemContent,ptmp+1); // string in the right of "=" is copied to p_confitem->Content
+            strncpy(p_confitem->Name,linebuf,(int)(ptmp-linebuf)); //string in the left of "=" is copied to p_confitem->Name
+            strcpy(p_confitem->Content,ptmp+1); // string in the right of "=" is copied to p_confitem->Content
 
-            Rtrim(p_confitem->ItemName);
-			Ltrim(p_confitem->ItemName);
-			Rtrim(p_confitem->ItemContent);
-			Ltrim(p_confitem->ItemContent);
+            Rtrim(p_confitem->Name);
+			Ltrim(p_confitem->Name);
+			Rtrim(p_confitem->Content);
+			Ltrim(p_confitem->Content);
 
             //printf("itemname=%s | itemcontent=%s\n",p_confitem->ItemName,p_confitem->ItemContent);            
             m_ConfigItemList.push_back(p_confitem);  
@@ -93,25 +93,39 @@ bool NGX_Config::Load(const char *pConfName) {
     return true;
 }
 
-//Read Configuration String due to ItemName
-const char *CConfig::GetString(const char *p_ItemName)
+/* Read Configuration String due to ItemName
+ * 
+ *	@p_ItemName: the name of the item that need to be read
+ *
+ *	if success, return the pointer to cointent read from file
+ *
+ *	*/
+const char *NGX_Config::GetString(const char *p_ItemName)
 {
 	std::vector<pNGX_ConfItem>::iterator item;	
 	for(item = m_ConfigItemList.begin(); item != m_ConfigItemList.end(); ++item)
 	{	
-		if(strcasecmp( (*item)->ItemName,p_itemname) == 0)
+		if(strcasecmp( (*item)->Name,p_ItemName) == 0)
 			return (*item)->Content;
 	}
 	return NULL;
 }
 
-//Read Configuration Integer due to ItemName
-int CConfig::GetIntDefault(const char *p_itemname,const int def)
+/* Read Configuration Integer due to ItemName
+ * 
+ *	@p_ItemName: the name of the item that need to be read
+ *	@def: default return number
+ *
+ *	if success, return the number read from file
+ *	if fail, return default number
+ *
+ *	*/
+int NGX_Config::GetInt(const char *p_ItemName,const int def)
 {
 	std::vector<pNGX_ConfItem>::iterator item;	
 	for(item = m_ConfigItemList.begin(); item !=m_ConfigItemList.end(); ++item)
 	{	
-		if(strcasecmp( (*item)->ItemName,p_itemname) == 0)
+		if(strcasecmp( (*item)->Name,p_ItemName) == 0)
 			return atoi((*item)->Content);
 	}
 	return def;
