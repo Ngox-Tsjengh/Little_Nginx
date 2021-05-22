@@ -76,7 +76,8 @@ static int  ngx_worker_start(int threads)
 		default://Parent Process
 			break;
 
-		} //switch
+		} //switc
+
 	} //for
 	return pid;
 }

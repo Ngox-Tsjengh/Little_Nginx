@@ -1,6 +1,12 @@
 #ifndef __NGX_CONF_H__
 #define __NGX_CONF_H__
 
+#include <vector>
+
+typedef struct _NGX_ConfItem {
+	char Name[32];
+	char Content[256];
+}NGX_ConfItem, *P_NGX_ConfItem;
 
 class NGX_Config {
 	
@@ -39,7 +45,7 @@ public:
 
 public:
 	//Vector to store configuration items
-	//std::vector<>
+	std::vector<P_NGX_ConfItem> m_ConfigItemList;
 
 };
 

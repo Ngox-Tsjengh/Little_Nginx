@@ -7,6 +7,7 @@ LD		= ld
 
 INCDIR	= headers
 SRCDIR	= core	\
+		  net	\
 		  log
 INCDIR += $(SRCDIR)
 OBJDIR	= obj
