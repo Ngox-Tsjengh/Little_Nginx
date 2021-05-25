@@ -6,7 +6,9 @@
 
 #include "ngx_conf.h"
 #include "ngx_socket.h"
-#include "ngx_debug.h"
+extern "C" {
+#include "ngx_string.h"
+}
 
 NGXSocket::NGXSocket(){
 	m_ListenPortCount = 0;
@@ -97,6 +99,8 @@ bool NGXSocket::ngx_open_listening_sockets()
 printf("Successfully listen to port %d\n",iport);
 		m_ListenSocketList.push_back(p_listensockitem); //add to list
 	}//for (int i=0; i<m_ListenPortCount; i++)
+
+	return true;
 }
 
 bool NGXSocket::set_nonblocking(int sockfd) 

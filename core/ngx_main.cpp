@@ -5,7 +5,9 @@
 #include "ngx_conf.h"
 #include "ngx_global.h"
 
-#include "ngx_debug.h"
+extern "C" {
+#include "ngx_string.h"
+}
 
 void ngx_master_cycle();
 
@@ -30,7 +32,7 @@ void ngx_master_cycle() {
 	 * TODO: Read how many worker process need to be create from configure file
 	 * *****************************/ 
 	NGX_Config *p_config = NGX_Config::GetInstance();
-	int workers = 4 ;//p_config-> Not implement yet
+	int workers = p_config->GetInt("WorkerProcesses",1); //Read from Configuration, if fail, the default value is 1
 	ngx_worker_start(workers);
 
 	/**************  **************
@@ -84,25 +86,28 @@ static int  ngx_worker_start(int threads)
 
 /* ngx_worker_cycle - Main Loop of Slave
  *
- * This function should not return
+ * @proc_num: the identification number of process
+ * @proc_name: should be "Worker"
  *
+ * This function should not return
  * */
 void ngx_worker_cycle(int proc_num, const char* proc_name) {
 	ngx_worker_init(proc_num);
 
 	while(1) {
 		usleep(1000000);
-		printf("I'm worker %d\n",proc_num);
+		printf("I'm %s %d\n",proc_name, proc_num);
 	}
 }
 
 /* ngx_worker_init - Initialization Work for worker process
  *
+ * @proc_num: the identification number of process
  * */
 static void ngx_worker_init(int proc_num) {
 	ngx_process = NGX_PROCESS_WORKER;	//set type of process
 
-	printf("Initialization\n");
+	printf("Initialization %d\n",proc_num);
 
 	return;
 }
