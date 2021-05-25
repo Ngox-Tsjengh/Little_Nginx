@@ -3,7 +3,9 @@
 #include <string.h>
 
 #include "ngx_conf.h"
+extern "C" {
 #include "ngx_string.h"
+}
 
 //Assign Value for Static Member
 NGX_Config *NGX_Config::m_instance = NULL;

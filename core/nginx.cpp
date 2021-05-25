@@ -17,7 +17,7 @@ int		ngx_process;	//Indicate type of Process: Master, Slave
 
 void source_free();
 
-int main(int argc, char* const *argv) {
+int main(int /*argc*/, char** const /* *argv*/) {
 
 	/**  0. Preparation
 	 */

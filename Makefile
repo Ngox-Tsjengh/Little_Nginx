@@ -1,7 +1,9 @@
 V		= @
 
-CC		= g++
-CPPFLAGS = -Wall -Wextra -ggdb
+CC		= gcc
+PP		= g++
+CPPFLAGS = -Wall -Wextra -ggdb \
+		   -Wno-c++11-compat-deprecated-writable-strings
 
 LD		= ld
 
@@ -16,8 +18,10 @@ BINDIR	=
 SLASH	= /
 #TYPE	= c cpp
 #SRCA	= $(foreach c_dir,$(SRCDIR),$(call listf,$(c_dir),$(TYPE)))
-SRCS	= $(shell find $(SRCDIR) -name '*.cpp' -o -name '*.c')
-OBJS	= $(addsuffix .o, $(basename $(SRCS)))
+CSRCS	= $(shell find $(SRCDIR) -name '*.c')
+CPPSRCS	= $(shell find $(SRCDIR) -name '*.cpp')
+COBJS	= $(addsuffix .c.o, $(basename $(CSRCS)))
+CPPOBJS	= $(addsuffix .cpp.o, $(basename $(CPPSRCS)))
 
 HEAD	= $(call listf,headers,h)
 CPPFLAGS += $(addprefix -I,$(INCDIR))
@@ -28,11 +32,14 @@ TARGET	= nginx
 
 all: $(BINDIR)$(TARGET) tags
 
-$(BINDIR)$(TARGET): $(OBJS)
-	$(CC) $(addprefix $(OBJDIR)/,$(notdir $^)) -o $@
+$(BINDIR)$(TARGET): $(COBJS) $(CPPOBJS)
+	$(PP) $(addprefix $(OBJDIR)/,$(notdir $^)) -o $@
 	
-%.o: %.cpp
+%.c.o: %.c
 	$(CC) $(CPPFLAGS) -c $< -o $(addprefix $(OBJDIR)/,$(notdir $@))
+
+%.cpp.o: %.cpp
+	$(PP) $(CPPFLAGS) -c $< -o $(addprefix $(OBJDIR)/,$(notdir $@))
 
 #$(OBJS): $(SRCS)
 #	$(CC) $(CPPFLAGS) -c $< -o $(addprefix $(OBJDIR)/,$(notdir $@))
